@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<features xmlns="http://karaf.apache.org/xmlns/features/v1.0.0" name="${project.artifactId}-${project.version}">
+  <feature name="${project.artifactId}">
+    <feature>camel-core</feature>
+    <feature>camel-cxf</feature>
+    <feature>camel-spring</feature>
+
+    <bundle>mvn:${project.groupId}/${project.artifactId}/${project.version}</bundle>
+  </feature>
+</features>

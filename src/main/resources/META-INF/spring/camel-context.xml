@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf-2.12.3.xsd
+                        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.12.3.xsd">
+
+  <!-- CXF RS beans -->
+  <cxf:rsServer id="globalRegistryRedirector" address="${url.servicemix:}/globalregistry"
+      serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="true" />
+
+  <bean id="sbrEntityPredicate" class="org.ccci.gto.servicemix.globalreg.camel.SingleBestRecordEntityPredicate" />
+  <cxf:rsClient id="singleBestRecord" address="http://sbr.global-registry.org/API"
+      serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="true" />
+
+  <cxf:rsClient id="globalRegistry" address="http://gr.stage.uscm.org"
+      serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="true" />
+
+  <camel:camelContext>
+    <camel:route>
+      <camel:from uri="cxfrs:bean:globalRegistryRedirector?throwExceptionOnFailure=false" />
+      <camel:choice>
+        <camel:when>
+          <camel:method>sbrEntityPredicate</camel:method>
+          <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
+        </camel:when>
+        <camel:otherwise>
+          <camel:to uri="cxfrs:bean:globalRegistry?throwExceptionOnFailure=false" />
+        </camel:otherwise>
+      </camel:choice>
+    </camel:route>
+  </camel:camelContext>
+</beans>
