@@ -7,14 +7,13 @@
 
   <!-- CXF RS beans -->
   <cxf:rsServer id="globalRegistryRedirector" address="${url.servicemix:}/globalregistry"
-      serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="true" />
+      serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="false" />
+  <cxf:rsClient id="singleBestRecord" address="${uri.sbr}"
+      serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="false" />
+  <cxf:rsClient id="globalRegistry" address="${uri.backend}"
+      serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="false" />
 
   <bean id="sbrEntityPredicate" class="org.ccci.gto.servicemix.globalreg.camel.SingleBestRecordEntityPredicate" />
-  <cxf:rsClient id="singleBestRecord" address="http://sbr.global-registry.org/API"
-      serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="true" />
-
-  <cxf:rsClient id="globalRegistry" address="http://gr.stage.uscm.org"
-      serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="true" />
 
   <camel:camelContext>
     <camel:route>
