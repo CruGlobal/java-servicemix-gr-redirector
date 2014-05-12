@@ -17,8 +17,8 @@ public class SingleBestRecordEntityPredicate implements Predicate {
             final UriInfo uri = message.getBody(UriInfo.class);
             final MultivaluedMap<String, String> path = uri.getPathParameters();
             final MultivaluedMap<String, String> query = uri.getQueryParameters();
-            final String createdBy = query.getFirst("created_by");
-            if ("entities".equals(path.getFirst(PARAM_TYPE)) && (createdBy == null || "".equals(createdBy))) {
+            final String ownedBy = query.getFirst("filters[owned_by]");
+            if ("entities".equals(path.getFirst(PARAM_TYPE)) && (ownedBy == null || "".equals(ownedBy))) {
                 return true;
             }
         }
