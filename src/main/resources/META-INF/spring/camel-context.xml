@@ -14,6 +14,14 @@
       serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="false" />
 
   <bean id="sbrEntityPredicate" class="org.ccci.gto.servicemix.globalreg.camel.SingleBestRecordEntityPredicate" />
+  <bean id="sbrResourcePredicate" class="org.ccci.gto.servicemix.globalreg.camel.SingleBestRecordResourcePredicate">
+    <property name="resources">
+      <set>
+        <value>rules</value>
+        <value>ruleset</value>
+      </set>
+    </property>
+  </bean>
 
   <camel:camelContext>
     <camel:route>
@@ -21,6 +29,10 @@
       <camel:choice>
         <camel:when>
           <camel:method>sbrEntityPredicate</camel:method>
+          <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
+        </camel:when>
+        <camel:when>
+          <camel:method>sbrResourcePredicate</camel:method>
           <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
         </camel:when>
         <camel:otherwise>
