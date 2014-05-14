@@ -28,11 +28,11 @@
       <camel:from uri="cxfrs:bean:globalRegistryRedirector?throwExceptionOnFailure=false" />
       <camel:choice>
         <camel:when>
-          <camel:method>sbrEntityPredicate</camel:method>
+          <camel:method>sbrResourcePredicate</camel:method>
           <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
         </camel:when>
         <camel:when>
-          <camel:method>sbrResourcePredicate</camel:method>
+          <camel:method>sbrEntityPredicate</camel:method>
           <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
         </camel:when>
         <camel:otherwise>
