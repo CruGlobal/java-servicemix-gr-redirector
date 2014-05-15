@@ -1,6 +1,6 @@
 package org.ccci.gto.servicemix.globalreg.jaxrs.api;
 
-import static org.ccci.gto.servicemix.globalreg.Constants.PATH_ID;
+import static org.ccci.gto.servicemix.globalreg.Constants.PATH_RESOURCE;
 import static org.ccci.gto.servicemix.globalreg.Constants.PATH_TYPE;
 
 import javax.ws.rs.DELETE;
@@ -35,25 +35,25 @@ public class WildcardEndpoint {
     }
 
     @GET
-    @Path(PATH_ID)
+    @Path(PATH_RESOURCE)
     public Response getSingle(@Context final UriInfo uri) {
         return null;
     }
 
     @POST
-    @Path(PATH_ID)
+    @Path(PATH_RESOURCE)
     public Response postSingle(final String data) {
         return null;
     }
 
     @PUT
-    @Path(PATH_ID)
+    @Path(PATH_RESOURCE)
     public Response putSingle(final String data) {
         return null;
     }
 
     @DELETE
-    @Path(PATH_ID)
+    @Path(PATH_RESOURCE)
     public Response deleteSingle(final String data) {
         return null;
     }
