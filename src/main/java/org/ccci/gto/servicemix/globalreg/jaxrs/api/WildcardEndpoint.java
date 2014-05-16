@@ -8,14 +8,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 @Path(PATH_TYPE)
 public class WildcardEndpoint {
     @GET
-    public Response getAll(@Context final UriInfo uri) {
+    public Response getAll() {
         return null;
     }
 
@@ -36,7 +34,7 @@ public class WildcardEndpoint {
 
     @GET
     @Path(PATH_RESOURCE)
-    public Response getSingle(@Context final UriInfo uri) {
+    public Response getSingle() {
         return null;
     }
 

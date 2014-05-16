@@ -13,6 +13,8 @@
   <cxf:rsClient id="globalRegistry" address="${uri.backend}"
       serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="false" />
 
+  <bean id="processQuery" class="org.ccci.gto.servicemix.globalreg.camel.QueryProcessor" />
+
   <bean id="sbrEntityPredicate" class="org.ccci.gto.servicemix.globalreg.camel.SingleBestRecordEntityPredicate" />
   <bean id="sbrResourcePredicate" class="org.ccci.gto.servicemix.globalreg.camel.SingleBestRecordResourcePredicate">
     <property name="resources">
@@ -26,6 +28,7 @@
   <camel:camelContext>
     <camel:route>
       <camel:from uri="cxfrs:bean:globalRegistryRedirector?throwExceptionOnFailure=false" />
+      <camel:process ref="processQuery" />
       <camel:choice>
         <camel:when>
           <camel:method>sbrResourcePredicate</camel:method>
