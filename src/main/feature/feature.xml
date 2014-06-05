@@ -5,6 +5,9 @@
     <feature>camel-cxf</feature>
     <feature>camel-spring</feature>
 
+    <!-- Miscellaneous dependencies -->
+    <bundle>mvn:com.google.guava/guava/${google-guava.version}</bundle>
+
     <bundle>mvn:${project.groupId}/${project.artifactId}/${project.version}</bundle>
   </feature>
 </features>
