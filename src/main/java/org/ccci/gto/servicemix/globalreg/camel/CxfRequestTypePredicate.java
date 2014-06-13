@@ -7,23 +7,24 @@ import org.apache.camel.Predicate;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SingleBestRecordResourcePredicate implements Predicate {
-    private final Set<String> resources = new HashSet<>();
+public class CxfRequestTypePredicate implements Predicate {
+    private Set<String> types = new HashSet<>();
 
-    public void setResources(final Collection<String> resources) {
-        this.resources.clear();
-        if (resources != null) {
-            this.resources.addAll(resources);
-        }
+    public Collection<String> getTypes() {
+        return this.types;
+    }
+
+    public void setTypes(final Collection<String> types) {
+        this.types = types != null ? Collections.unmodifiableSet(new HashSet<>(types)) : Collections.<String>emptySet();
     }
 
     @Override
     public boolean matches(final Exchange exchange) {
         final MultivaluedMap<String, String> path = CamelCxfUtils.getPathParameters(exchange);
-        final String type = path != null ? path.getFirst(PARAM_TYPE) : null;
-        return type != null && this.resources.contains(type);
+        return path != null && this.types.contains(path.getFirst(PARAM_TYPE));
     }
 }

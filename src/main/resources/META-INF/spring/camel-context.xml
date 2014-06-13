@@ -15,14 +15,73 @@
 
   <bean id="processQuery" class="org.ccci.gto.servicemix.globalreg.camel.QueryProcessor" />
 
-  <bean id="sbrEntityPredicate" class="org.ccci.gto.servicemix.globalreg.camel.SingleBestRecordEntityPredicate" />
-  <bean id="sbrResourcePredicate" class="org.ccci.gto.servicemix.globalreg.camel.SingleBestRecordResourcePredicate">
-    <property name="resources">
+  <!-- component predicates, these are used for construction of other predicates -->
+  <bean id="getEntitiesPredicate" class="org.ccci.gto.servicemix.globalreg.camel.AndPredicate">
+    <constructor-arg>
+      <list>
+        <bean class="org.ccci.gto.servicemix.globalreg.camel.CxfRequestMethodPredicate">
+          <property name="methods">
+            <set>
+              <value>GET</value>
+            </set>
+          </property>
+        </bean>
+        <bean class="org.ccci.gto.servicemix.globalreg.camel.CxfRequestTypePredicate">
+          <property name="types">
+            <set>
+              <value>entities</value>
+            </set>
+          </property>
+        </bean>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <!-- Any request to the /rules or /ruleset type endpoints -->
+  <bean id="sbrResourcePredicate" class="org.ccci.gto.servicemix.globalreg.camel.CxfRequestTypePredicate">
+    <property name="types">
       <set>
         <value>rules</value>
         <value>ruleset</value>
       </set>
     </property>
+  </bean>
+
+  <!-- GET requests to /entities w/ a ruleset parameter -->
+  <bean id="sbrRulesetPredicate" class="org.ccci.gto.servicemix.globalreg.camel.AndPredicate">
+    <constructor-arg>
+      <list>
+        <ref local="getEntitiesPredicate" />
+        <bean class="org.ccci.gto.servicemix.globalreg.camel.CxfRequestQueryParamsPredicate">
+          <property name="params">
+            <set>
+              <value>ruleset</value>
+            </set>
+          </property>
+        </bean>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <!-- GET requests to /entities w/o an owned_by filter -->
+  <bean id="sbrMissingOwnedByPredicate" class="org.ccci.gto.servicemix.globalreg.camel.AndPredicate">
+    <constructor-arg>
+      <list>
+        <ref local="getEntitiesPredicate" />
+        <bean class="org.ccci.gto.servicemix.globalreg.camel.NotPredicate">
+          <constructor-arg>
+            <bean class="org.ccci.gto.servicemix.globalreg.camel.CxfRequestQueryParamsPredicate">
+              <property name="params">
+                <set>
+                  <value>filters[owned_by]</value>
+                  <value>filters[owned_by][]</value>
+                </set>
+              </property>
+            </bean>
+          </constructor-arg>
+        </bean>
+      </list>
+    </constructor-arg>
   </bean>
 
   <camel:camelContext>
@@ -35,7 +94,11 @@
           <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
         </camel:when>
         <camel:when>
-          <camel:method>sbrEntityPredicate</camel:method>
+          <camel:method>sbrRulesetPredicate</camel:method>
+          <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
+        </camel:when>
+        <camel:when>
+          <camel:method>sbrMissingOwnedByPredicate</camel:method>
           <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
         </camel:when>
         <camel:otherwise>
