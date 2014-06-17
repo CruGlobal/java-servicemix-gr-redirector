@@ -9,14 +9,14 @@
   </parent>
 
   <artifactId>servicemix-gto-global-registry-redirector</artifactId>
-  <version>0.1.2-SNAPSHOT</version>
+  <version>0.1.2</version>
   <name>Global Registry Redirector Service</name>
   <description>Service that redirects single best record requests to the SBR service.</description>
 
   <scm>
     <connection>scm:git:git@git.gcx.org:java/servicemix/gr-redirector.git</connection>
     <developerConnection>scm:git:git@git.gcx.org:java/servicemix/gr-redirector.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v0.1.2</tag>
   </scm>
 
   <dependencies>
