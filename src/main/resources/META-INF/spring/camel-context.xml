@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:camel="http://camel.apache.org/schema/spring"
-    xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:http="http://cxf.apache.org/transports/http/configuration"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.12.3.xsd
                         http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf-2.12.3.xsd
-                        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring-2.12.3.xsd">
+                        http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+
+  <!-- use the default HostnameVerifier to work around SNI bug in OpenJDK 1.8 -->
+  <http:conduit name="*.http-conduit">
+    <http:tlsClientParameters useHttpsURLConnectionDefaultHostnameVerifier="true" />
+  </http:conduit>
 
   <!-- CXF RS beans -->
   <cxf:rsServer id="globalRegistryRedirector" address="${url.servicemix:}/globalregistry"
