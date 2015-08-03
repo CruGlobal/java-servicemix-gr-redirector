@@ -21,6 +21,8 @@
       serviceClass="org.ccci.gto.servicemix.globalreg.jaxrs.api.WildcardEndpoint" loggingFeatureEnabled="false" />
 
   <bean id="processQuery" class="org.ccci.gto.servicemix.globalreg.camel.QueryProcessor" />
+  <bean id="forwardingHeaderFilter"
+      class="org.ccci.gto.servicemix.globalreg.camel.component.cxf.jaxrs.ForwardingCxfRsHeaderFilterStrategy" />
 
   <!-- component predicates, these are used for construction of other predicates -->
   <bean id="getEntitiesPredicate" class="org.ccci.gto.servicemix.globalreg.camel.AndPredicate">
@@ -98,18 +100,18 @@
       <camel:choice>
         <camel:when>
           <camel:method>sbrResourcePredicate</camel:method>
-          <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
+          <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false&amp;headerFilterStrategy=#forwardingHeaderFilter" />
         </camel:when>
         <camel:when>
           <camel:method>sbrRulesetPredicate</camel:method>
-          <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
+          <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false&amp;headerFilterStrategy=#forwardingHeaderFilter" />
         </camel:when>
         <camel:when>
           <camel:method>sbrMissingOwnedByPredicate</camel:method>
-          <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false" />
+          <camel:to uri="cxfrs:bean:singleBestRecord?throwExceptionOnFailure=false&amp;headerFilterStrategy=#forwardingHeaderFilter" />
         </camel:when>
         <camel:otherwise>
-          <camel:to uri="cxfrs:bean:globalRegistry?throwExceptionOnFailure=false" />
+          <camel:to uri="cxfrs:bean:globalRegistry?throwExceptionOnFailure=false&amp;headerFilterStrategy=#forwardingHeaderFilter" />
         </camel:otherwise>
       </camel:choice>
     </camel:route>
